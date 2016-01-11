@@ -3,7 +3,7 @@ Contributors: hearken
 Tags: woocommerce, donations, donation, donate, fundraising, giving, charity, non-profit, nonprofit, ecommerce
 Requires at least: 3.5
 Tested up to: 4.4
-Stable tag: 1.0
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -23,6 +23,10 @@ The Donations for WooCommerce plugin facilitates acceptance of donations of vary
 Alternatively, you can manually upload the plugin to your wp-content/plugins directory.
 
 == Changelog ==
+
+= 1.0.1 =
+* Bugfix: Amount field shown in cart for products other than donations
+* Bugfix: Amount field missing step parameter
 
 = 1.0 =
 * Initial release

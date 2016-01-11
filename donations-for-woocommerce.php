@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Donations for WooCommerce
  * Description: Easily accept donations of varying amounts through your WooCommerce store.
- * Version: 1.0
+ * Version: 1.0.1
  * Author: Potent Plugins
  * Author URI: http://potentplugins.com/?utm_source=donations-for-woocommerce&utm_medium=link&utm_campaign=wp-plugin-credit-link
  * License: GNU General Public License version 2 or later
@@ -52,7 +52,7 @@ function hm_wcdon_before_add_to_cart_button() {
 	global $product;
 	echo('<span class="wc-donation-amount">
 			<label for="donation_amount_field">Amount:</label>
-			<input type="number" name="donation_amount" id="donation_amount_field" size="5" value="'.number_format($product->price, 2).'" />
+			<input type="number" name="donation_amount" id="donation_amount_field" size="5" min="0" step="0.01" value="'.number_format($product->price, 2).'" />
 		</span>');
 }
 
@@ -136,7 +136,9 @@ function hm_wcdon_get_cart_item_from_session($session_data) {
 // Add the donation amount field to the cart display
 add_filter('woocommerce_cart_item_price', 'hm_wcdon_cart_item_price', 10, 3);
 function hm_wcdon_cart_item_price($price, $cart_item, $cart_item_key) {
-	return '<input type="number" name="donation_amount_'.$cart_item_key.'" size="5" value="'.$cart_item['data']->price.'" />';
+	return ($cart_item['data']->product_type == 'donation' ? 
+				'<input type="number" name="donation_amount_'.$cart_item_key.'" size="5" min="0" step="0.01" value="'.$cart_item['data']->price.'" />' :
+				$price);
 }
 
 // Process donation amount fields in cart updates
