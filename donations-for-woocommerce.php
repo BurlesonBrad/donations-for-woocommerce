@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Donations for WooCommerce
  * Description: Easily accept donations of varying amounts through your WooCommerce store.
- * Version: 1.0.1
+ * Version: 1.0.2
  * Author: Potent Plugins
  * Author URI: http://potentplugins.com/?utm_source=donations-for-woocommerce&utm_medium=link&utm_campaign=wp-plugin-credit-link
  * License: GNU General Public License version 2 or later
@@ -50,10 +50,12 @@ function hm_wcdon_get_price_html($price, $product) {
 add_action('woocommerce_before_add_to_cart_button', 'hm_wcdon_before_add_to_cart_button');
 function hm_wcdon_before_add_to_cart_button() {
 	global $product;
-	echo('<span class="wc-donation-amount">
-			<label for="donation_amount_field">Amount:</label>
-			<input type="number" name="donation_amount" id="donation_amount_field" size="5" min="0" step="0.01" value="'.number_format($product->price, 2).'" />
-		</span>');
+	if ($product->product_type == 'donation') {
+		echo('<span class="wc-donation-amount">
+				<label for="donation_amount_field">Amount:</label>
+				<input type="number" name="donation_amount" id="donation_amount_field" size="5" min="0" step="0.01" value="'.number_format($product->price, 2).'" />
+			</span>');
+	}
 }
 
 // Add Donation product type option
@@ -146,7 +148,7 @@ add_filter('woocommerce_update_cart_action_cart_updated', 'hm_wcdon_update_cart'
 function hm_wcdon_update_cart($cart_updated) {
 	foreach (WC()->cart->get_cart() as $key => $cartItem) {
 		if ($cartItem['data']->product_type == 'donation' && isset($_POST['donation_amount_'.$key])
-				&& is_numeric($_POST['donation_amount_'.$key]) && $_POST['donation_amount_'.$key] != $cartItem['data']->price) {
+				&& is_numeric($_POST['donation_amount_'.$key]) && $_POST['donation_amount_'.$key] > 0 && $_POST['donation_amount_'.$key] != $cartItem['data']->price) {
 			$cartItem['donation_amount'] = $_POST['donation_amount_'.$key]*1;
 			$cartItem['data']->price = $cartItem['donation_amount'];
 			WC()->cart->cart_contents[$key] = $cartItem;
