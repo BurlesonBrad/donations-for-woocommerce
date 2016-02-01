@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Donations for WooCommerce
  * Description: Easily accept donations of varying amounts through your WooCommerce store.
- * Version: 1.0.2
+ * Version: 1.0.3
  * Author: Potent Plugins
  * Author URI: http://potentplugins.com/?utm_source=donations-for-woocommerce&utm_medium=link&utm_campaign=wp-plugin-credit-link
  * License: GNU General Public License version 2 or later
@@ -78,6 +78,8 @@ function hm_wcdon_product_data_tabs($tabs) {
 // Create the WC_Product_Donation class
 add_filter('plugins_loaded', 'hm_wcdon_create_product_type');
 function hm_wcdon_create_product_type() {
+	if (!class_exists('WC_Product_Simple'))
+		return;
 	class WC_Product_Donation extends WC_Product_Simple {
 		function __construct($product) {
 			parent::__construct($product);
